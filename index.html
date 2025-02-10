@@ -23,7 +23,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             font-family: Arial, sans-serif;
         }
 
@@ -34,10 +33,10 @@
             border-bottom-left-radius: 6px;
             border-bottom-right-radius: 6px;
             margin: 0 auto;
+            top: 50px;
             background-color: var(--color-flap);
             box-shadow: 0 4px 20px rgba(0,0,0,.1);
             cursor: pointer;
-            overflow: hidden;
         }
 
         .flap {
@@ -69,11 +68,12 @@
             box-shadow: 0 2px 26px rgba(0,0,0,.08);
             padding: 15px;
             box-sizing: border-box;
-            transition: transform 0.4s ease;
-            z-index: 1;
+            overflow: hidden;
         }
 
         .message {
+            position: relative;
+            z-index: 2;
             font-family: 'Handlee', cursive;
             color: #d46a84;
             text-align: center;
@@ -87,17 +87,10 @@
             text-shadow: 0 2px 3px rgba(0,0,0,0.1);
         }
 
-        .image-container {
-            display: none;
-            text-align: center;
+        .message img {
+            width: 100%;
+            border-radius: 5px;
             margin-top: 10px;
-        }
-
-        .image-container img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0,0,0,.1);
         }
 
         @keyframes float {
@@ -113,12 +106,103 @@
 
         .open .flap {
             transform: rotateX(180deg);
+            transition: transform 0.4s ease, z-index 0.6s;
+            z-index: 1;
+        }
+
+        .close .flap {
+            transform: rotateX(0deg);
+            transition: transform 0.4s 0.6s ease, z-index 1s;
+            z-index: 5;
+        }
+
+        .close .letter {
+            transform: translateY(0px); 
+            transition: transform 0.4s ease, z-index 1s;
             z-index: 1;
         }
 
         .open .letter {
             transform: translateY(-60px) rotate(-2deg);
+            transition: transform 0.4s 0.6s ease, z-index 0.6s;
             z-index: 2;
+        }
+
+        .hearts, .sparkles {
+            position: absolute;
+            top: 90px;
+            left: 0;
+            right: 0;
+            z-index: 2;
+        }
+
+        .heart, .sparkle {
+            position: absolute;
+            bottom: 0;
+            pointer-events: none;
+        }
+
+        .heart:before,
+        .heart:after {
+            content: "";
+            position: absolute;
+            left: 25px;
+            top: 0;
+            width: 25px;
+            height: 40px;
+            background: var(--color-heart);
+            border-radius: 25px 25px 0 0;
+            transform: rotate(-45deg);
+            transform-origin: 0 100%;
+        }
+
+        .heart:after {
+            left: 0;
+            transform: rotate(45deg);
+            transform-origin: 100% 100%;
+        }
+
+        .sparkle {
+            width: 8px;
+            height: 8px;
+            background: var(--color-sparkle);
+            border-radius: 50%;
+            animation: sparkleTwinkle 1s infinite;
+        }
+
+        .close .heart,
+        .close .sparkle {
+            opacity: 0;
+            animation: none;
+        }
+
+        .a1 { left: 20%; transform: scale(0.6); animation: slideUp 4s linear infinite, sideSway 2s ease-in-out infinite alternate; }
+        .a2 { left: 55%; animation: slideUp 5s linear infinite, sideSway 4s ease-in-out infinite alternate; }
+        .a3 { left: 10%; transform: scale(0.8); animation: slideUp 7s linear infinite, sideSway 2s ease-in-out infinite alternate; }
+
+        .s1 { left: 30%; animation: sparkleUp 3s linear infinite; }
+        .s2 { left: 60%; animation: sparkleUp 4s linear infinite; }
+        .s3 { left: 45%; animation: sparkleUp 5s linear infinite; }
+
+        @keyframes slideUp {
+            0% { top: 0; }
+            100% { top: -600px; }
+        }
+
+        @keyframes sideSway {
+            0% { margin-left: 0; }
+            50% { margin-left: 50px; }
+            100% { margin-left: 0; }
+        }
+
+        @keyframes sparkleUp {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-500px) rotate(360deg); opacity: 0; }
+        }
+
+        @keyframes sparkleTwinkle {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.5); }
         }
 
         .reset {
@@ -145,32 +229,30 @@
             transform: translateY(-3px) scale(1.05);
             box-shadow: 0 7px 25px rgba(0,0,0,0.2);
         }
-
-        @media (max-width: 600px) {
-            #envelope {
-                width: 90%;
-                height: auto;
-            }
-            .message p {
-                font-size: 1.5em;
-            }
-        }
     </style>
 </head>
 <body>
     <div class="envlope-wrapper">
         <div id="envelope" class="close">
-            <div class="flap"></div>
-            <div class="pocket"></div>
+            <div class="front flap"></div>
+            <div class="front pocket"></div>
             <div class="letter">
                 <div class="message">
                     <p>I love you,</p>
                     <p>most ardently</p>
+                    <img src="https://via.placeholder.com/150" alt="Love Image">
                 </div>
             </div>
-        </div>
-        <div class="image-container" id="imageContainer">
-            <img src="https://via.placeholder.com/250x150.png?text=Your+Image+Here" alt="Love Image">
+            <div class="hearts">
+                <div class="heart a1"></div>
+                <div class="heart a2"></div>
+                <div class="heart a3"></div>
+            </div>
+            <div class="sparkles">
+                <div class="sparkle s1"></div>
+                <div class="sparkle s2"></div>
+                <div class="sparkle s3"></div>
+            </div>
         </div>
     </div>
     <div class="reset">
@@ -184,17 +266,18 @@
             const envelope = $('#envelope');
             const btnOpen = $("#open");
             const btnReset = $("#reset");
-            const imageContainer = $("#imageContainer");
 
-            btnOpen.on('click', function() {
+            envelope.on('click', open);
+            btnOpen.on('click', open);
+            btnReset.on('click', close);
+
+            function open() {
                 envelope.removeClass("close").addClass("open");
-                imageContainer.fadeIn(); // Show the image when opened
-            });
+            }
 
-            btnReset.on('click', function() {
+            function close() {
                 envelope.removeClass("open").addClass("close");
-                imageContainer.fadeOut(); // Hide the image when closed
-            });
+            }
         });
     </script>
 </body>
